@@ -2,62 +2,256 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Dry-Fruits</title>
+  <title>Your Bag - Ekta's Blueberry</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
 
     body {
-      font-family: 'Baloo 2', cursive, 'Segoe UI', sans-serif;
-      background-color: #f0fbf4;
       margin: 0;
-      padding: 40px;
+      padding: 0;
+      font-family: 'Baloo 2', cursive, sans-serif;
+      background-color: #e8f8ec;
       color: #3b7f59;
-      text-align: center;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: relative;
     }
 
     h1 {
-      font-size: 48px;
-      margin-bottom: 20px;
+      text-align: center;
+      font-size: 40px;
+      margin-bottom: 30px;
     }
 
-    p {
+    .bag-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #b0dcbf;
+      padding: 12px 0;
+    }
+
+    .bag-info {
+      flex: 1;
+    }
+
+    .bag-name {
       font-size: 20px;
-      line-height: 1.6;
-      max-width: 800px;
-      margin: 0 auto 20px;
+      font-weight: bold;
     }
 
-    .contact-box {
-      margin-top: 30px;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      display: inline-block;
-    }
-
-    .contact-box strong {
+    .bag-price {
+      font-size: 16px;
       color: #2c6045;
+    }
+
+    .counter {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .counter button {
+      background-color: #3b7f59;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 18px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .counter button:hover {
+      background-color: #2c6045;
+    }
+
+    .bag-total {
+      font-size: 24px;
+      text-align: right;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .bag-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin: 30px 0;
+    }
+
+    .bag-btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .clear-btn {
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    .clear-btn:hover {
+      background-color: #ddd;
+    }
+
+    .checkout-btn {
+      background-color: #3b7f59;
+      color: white;
+    }
+
+    .checkout-btn:hover {
+      background-color: #2c6045;
+    }
+
+    .empty-bag {
+      text-align: center;
+      font-size: 20px;
+      color: #888;
+      padding: 30px 0;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-decoration: none;
+      background-color: #3b7f59;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #2c6045;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <a class="back-button" href="menu2.html">← Back to Menu</a>
+    <h1>Your Bag 🛍️</h1>
+    <div id="bagItems"></div>
+    <div class="bag-total" id="bagTotal"></div>
 
-  <h1>Place Your Order</h1>
-
-  <p>
-    We're excited to offer a curated selection of premium dry fruits that are both delicious and packed with nutrition. Whether it's almonds, cashews, raisins, or mixed trail packs — our offerings are perfect for snacking, gifting, or festive occasions.
-  </p>
-
-  <p>
-    Customize your box, choose your quantity, and we'll make sure it's packed fresh and delivered promptly.
-  </p>
-
-  <div class="contact-box">
-    <p>📞 Call us: <strong>+91-9876543210</strong></p>
-    <p>📧 Email us: <strong>orders@ektasblueberry.com</strong></p>
-    <p>🕒 Timings: <strong>Monday to Saturday, 9 AM – 9 PM</strong></p>
+    <div class="bag-buttons">
+      <button onclick="clearBag()" class="bag-btn clear-btn">Clear Bag</button>
+      <button onclick="checkout()" class="bag-btn checkout-btn">Checkout</button>
+    </div>
   </div>
 
+  <script>
+    let bag = JSON.parse(localStorage.getItem("bag")) || [];
+
+    function renderBag() {
+      const bagItems = document.getElementById("bagItems");
+      const bagTotal = document.getElementById("bagTotal");
+      bagItems.innerHTML = "";
+
+      if (bag.length === 0) {
+        bagItems.innerHTML = "<p class='empty-bag'>Your bag is empty.</p>";
+        bagTotal.textContent = "";
+        return;
+      }
+
+      let total = 0;
+      bag.forEach((item, index) => {
+        const subtotal = item.quantity * item.price;
+        total += subtotal;
+
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "bag-item";
+        itemDiv.innerHTML = `
+          <div class="bag-info">
+            <div class="bag-name">${item.name}</div>
+            <div class="bag-price">₹${item.price} x ${item.quantity} = ₹${subtotal}</div>
+          </div>
+          <div class="counter">
+            <button onclick="changeQty(${index}, -1)">-</button>
+            <span>${item.quantity}</span>
+            <button onclick="changeQty(${index}, 1)">+</button>
+          </div>
+        `;
+        bagItems.appendChild(itemDiv);
+      });
+
+      bagTotal.textContent = `Total: ₹${total}`;
+    }
+
+    function changeQty(index, delta) {
+      bag[index].quantity += delta;
+      if (bag[index].quantity <= 0) {
+        bag.splice(index, 1);
+      }
+      localStorage.setItem("bag", JSON.stringify(bag));
+      renderBag();
+    }
+
+    function clearBag() {
+      if (confirm("Are you sure you want to clear the bag?")) {
+        localStorage.removeItem("bag");
+        bag = [];
+        renderBag();
+        alert("🗑️ Bag cleared.");
+      }
+    }
+
+    async function checkout() {
+      if (bag.length === 0) {
+        alert("Your bag is empty.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      let y = 20;
+      doc.setFontSize(16);
+      doc.text("Ekta's Blueberry - Dry Fruits Order Receipt", 20, y);
+      y += 10;
+      doc.setFontSize(12);
+      doc.text(`Date: ${new Date().toLocaleString()}`, 20, y);
+      y += 10;
+
+      let total = 0;
+      doc.text("Items:", 20, y);
+      y += 10;
+
+      bag.forEach(item => {
+        const subtotal = item.quantity * item.price;
+        total += subtotal;
+        doc.text(`${item.name} - Qty: ${item.quantity} x ₹${item.price} = ₹${subtotal}`, 20, y);
+        y += 10;
+      });
+
+      y += 5;
+      doc.setFontSize(14);
+      doc.text(`Total: ₹${total}`, 20, y);
+
+      doc.save("Ekta_Blueberry_Bag_Receipt.pdf");
+
+      setTimeout(() => {
+        alert("🎉 Order placed successfully!");
+      }, 200);
+
+      localStorage.removeItem("bag");
+      bag = [];
+      renderBag();
+    }
+
+    renderBag();
+  </script>
 </body>
 </html>

@@ -5,115 +5,322 @@
   <title>Dry Fruits Menu</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
-      margin: 0;
       font-family: 'Baloo 2', cursive, sans-serif;
       background-color: #e8f8ec;
       color: #3b7f59;
-      text-align: center;
     }
 
-    h1 {
-      margin-top: 40px;
-      font-size: 48px;
+    .sidebar {
+      width: 220px;
+      background-color: #ffffff;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-right: 2px solid #b0dcbf;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
     }
 
-    p {
+    .sidebar h3 {
       font-size: 20px;
+      margin-bottom: 10px;
+      color: #3b7f59;
+    }
+
+    .sidebar input,
+    .sidebar select {
+      width: 100%;
+      padding: 6px 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .main {
+      margin-left: 240px;
+      padding: 30px;
+      position: relative;
+    }
+
+    .menu-heading {
+      text-align: center;
+      font-size: 48px;
       margin-bottom: 30px;
+      font-weight: 800;
     }
 
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
     }
 
-    .item {
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 128, 0, 0.1);
+    .cake-card {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
       transition: transform 0.3s ease;
+      text-align: center;
     }
 
-    .item:hover {
-      transform: translateY(-5px);
+    .cake-card img {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
     }
 
-    .item h3 {
-      margin-bottom: 10px;
-      font-size: 22px;
+    .cake-card:hover img {
+      transform: scale(1.08);
     }
 
-    .item span {
+    .cake-info {
+      margin-top: 10px;
+    }
+
+    .cake-name {
+      font-size: 20px;
       font-weight: bold;
+    }
+
+    .cake-price {
+      font-size: 16px;
       color: #2c6045;
     }
 
-    .back-button {
-      display: inline-block;
-      margin: 30px auto 40px;
-      padding: 10px 20px;
+    .cake-details {
+      display: none;
+      font-size: 14px;
+      margin-top: 8px;
+      color: #444;
+    }
+
+    .cake-card:hover .cake-details {
+      display: block;
+    }
+
+    .counter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 15px;
+    }
+
+    .counter button {
       background-color: #3b7f59;
       color: white;
       border: none;
-      border-radius: 10px;
-      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
       font-size: 18px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .counter button:hover {
+      background-color: #2c6045;
+    }
+
+    .counter span {
+      font-size: 18px;
+      min-width: 20px;
+      display: inline-block;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-decoration: none;
+      background-color: #3b7f59;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
     }
 
     .back-button:hover {
+      background-color: #2c6045;
+    }
+
+    .cart-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-decoration: none;
+      background-color: #3b7f59;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .cart-button:hover {
+      background-color: #2c6045;
+    }
+
+    .add-btn-container {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .add-btn-container button {
+      padding: 12px 30px;
+      background-color: #3b7f59;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .add-btn-container button:hover {
       background-color: #2c6045;
     }
   </style>
 </head>
 <body>
 
-  <h1>Our Dry Fruits Menu 🥜</h1>
-  <p>Choose from our handpicked premium dry fruits and nuts</p>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>Search & Filter</h3>
+    <input type="text" id="search" placeholder="Search dry fruits..." />
+    <select id="sort">
+      <option value="default">Sort By</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
+    <select id="category">
+      <option value="all">All Categories</option>
+      <option value="nuts">Nuts</option>
+      <option value="dried">Dried</option>
+    </select>
+  </div>
 
-  <div class="menu-grid">
-    <div class="item">
-      <h3>Almonds</h3>
-      <span>₹650/kg</span>
-    </div>
-    <div class="item">
-      <h3>Cashews</h3>
-      <span>₹700/kg</span>
-    </div>
-    <div class="item">
-      <h3>Raisins</h3>
-      <span>₹300/kg</span>
-    </div>
-    <div class="item">
-      <h3>Walnuts</h3>
-      <span>₹800/kg</span>
-    </div>
-    <div class="item">
-      <h3>Pistachios</h3>
-      <span>₹900/kg</span>
-    </div>
-    <div class="item">
-      <h3>Dates</h3>
-      <span>₹250/kg</span>
-    </div>
-    <div class="item">
-      <h3>Figs (Anjeer)</h3>
-      <span>₹950/kg</span>
-    </div>
-    <div class="item">
-      <h3>Mixed Dry Fruits Pack</h3>
-      <span>₹1200/kg</span>
+  <!-- Main Content -->
+  <div class="main">
+    <a class="back-button" href="dry-fruits.html">← Back</a>
+    <a class="cart-button" href="order2.html">🛍️ Bag</a>
+    <div class="menu-heading">Menu</div>
+    <div class="menu-grid" id="menuGrid"></div>
+
+    <div class="add-btn-container">
+      <button onclick="addToBag()">Add to Bag</button>
     </div>
   </div>
 
-  <a href="dryfruits.html" class="back-button">⬅ Back to Home</a>
+  <!-- Script -->
+  <script>
+    const dryFruits = [
+      { id: 1, name: "Almonds", price: 650, category: "nuts", img: "https://source.unsplash.com/200x200/?almonds", details: "Rich in Vitamin E." },
+      { id: 2, name: "Cashews", price: 700, category: "nuts", img: "https://source.unsplash.com/200x200/?cashews", details: "Creamy & crunchy." },
+      { id: 3, name: "Raisins", price: 300, category: "dried", img: "https://source.unsplash.com/200x200/?raisins", details: "Natural sweetener." },
+      { id: 4, name: "Walnuts", price: 800, category: "nuts", img: "https://source.unsplash.com/200x200/?walnuts", details: "Brain booster." },
+      { id: 5, name: "Pistachios", price: 900, category: "nuts", img: "https://source.unsplash.com/200x200/?pistachios", details: "Crunchy delight." },
+      { id: 6, name: "Dates", price: 250, category: "dried", img: "https://source.unsplash.com/200x200/?dates", details: "Sweet and nutritious." }
+    ];
 
+    const quantities = {};
+    const menuGrid = document.getElementById("menuGrid");
+
+    function renderItems(items) {
+      menuGrid.innerHTML = "";
+      items.forEach(item => {
+        quantities[item.id] = quantities[item.id] || 0;
+        const card = document.createElement("div");
+        card.className = "cake-card";
+        card.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cake-info">
+            <div class="cake-name">${item.name}</div>
+            <div class="cake-price">₹${item.price} / kg</div>
+          </div>
+          <div class="cake-details">${item.details}</div>
+          <div class="counter">
+            <button onclick="changeQty(${item.id}, -1)">-</button>
+            <span id="qty-${item.id}">${quantities[item.id]}</span>
+            <button onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        `;
+        menuGrid.appendChild(card);
+      });
+    }
+
+    function changeQty(id, delta) {
+      quantities[id] += delta;
+      if (quantities[id] < 0) quantities[id] = 0;
+      document.getElementById(`qty-${id}`).innerText = quantities[id];
+    }
+
+    function addToBag() {
+      let bag = JSON.parse(localStorage.getItem("bag")) || [];
+
+      dryFruits.forEach(item => {
+        const qty = quantities[item.id];
+        if (qty > 0) {
+          const existing = bag.find(d => d.id === item.id);
+          if (existing) {
+            existing.quantity += qty;
+          } else {
+            bag.push({ ...item, quantity: qty });
+          }
+        }
+      });
+
+      localStorage.setItem("bag", JSON.stringify(bag));
+      alert("✅ Items added to your bag!");
+      
+      // Reset quantity
+      for (let id in quantities) {
+        quantities[id] = 0;
+        document.getElementById(`qty-${id}`).innerText = "0";
+      }
+    }
+
+    function applyFilters() {
+      let filtered = [...dryFruits];
+      const search = document.getElementById("search").value.toLowerCase();
+      const sort = document.getElementById("sort").value;
+      const category = document.getElementById("category").value;
+
+      if (search) {
+        filtered = filtered.filter(item => item.name.toLowerCase().includes(search));
+      }
+
+      if (category !== "all") {
+        filtered = filtered.filter(item => item.category === category);
+      }
+
+      if (sort === "low") {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sort === "high") {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+
+      renderItems(filtered);
+    }
+
+    document.getElementById("search").addEventListener("input", applyFilters);
+    document.getElementById("sort").addEventListener("change", applyFilters);
+    document.getElementById("category").addEventListener("change", applyFilters);
+
+    renderItems(dryFruits);
+  </script>
 </body>
 </html>
