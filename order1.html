@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cart</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff8f0;
+      padding: 20px;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #b33951;
+    }
+
+    .cart-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px auto;
+      max-width: 500px;
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .cart-item h3 {
+      margin: 0;
+      font-size: 20px;
+      color: #b33951;
+    }
+
+    .cart-item p {
+      margin: 6px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Your Cart</h1>
+  <div id="cartContainer"></div>
+
+  <script>
+    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    const container = document.getElementById("cartContainer");
+
+    if (cartData.length === 0) {
+      container.innerHTML = "<p>Your cart is empty!</p>";
+    } else {
+      cartData.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <h3>${item.name}</h3>
+          <p>Quantity: ${item.quantity}</p>
+          <p>Price: ₹${item.price}</p>
+          <p>Total: ₹${item.price * item.quantity}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+  </script>
+
+</body>
+</html>

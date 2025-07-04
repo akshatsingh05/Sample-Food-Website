@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cake Menu</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive, sans-serif;
+      background-color: #fff4f8;
+      color: #b33951;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #fff;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-right: 2px solid #ffc8d6;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .sidebar h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #b33951;
+    }
+
+    .sidebar input,
+    .sidebar select {
+      width: 100%;
+      padding: 6px 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .main {
+      margin-left: 240px;
+      padding: 30px;
+      position: relative;
+    }
+
+    .menu-heading {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 30px;
+      font-weight: 800;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .cake-card {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+      transition: transform 0.3s ease;
+      text-align: center;
+      .cake-card img {
+  width: 100%;
+  height: 220px; /* Increase height */
+  border-radius: 10px;
+  object-fit: cover; /* You can switch to 'contain' if needed */
+}
+    }
+
+.cake-card:hover img {
+  transform: scale(1.1);
+  height: 240px;
+}
+
+    .cake-card img {
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: transform 0.4s ease, height 0.4s ease;
+    }
+
+    .cake-info {
+      margin-top: 10px;
+    }
+
+    .cake-name {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .cake-price {
+      font-size: 16px;
+      color: #922d40;
+    }
+
+    .cake-details {
+      display: none;
+      font-size: 14px;
+      margin-top: 8px;
+      color: #444;
+    }
+
+    .cake-card:hover .cake-details {
+      display: block;
+    }
+
+    .counter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 15px;
+    }
+
+    .counter button {
+      background-color: #b33951;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .counter button:hover {
+      background-color: #922d40;
+    }
+
+    .counter span {
+      font-size: 18px;
+      min-width: 20px;
+      display: inline-block;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-decoration: none;
+      background-color: #b33951;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+      background-color: #922d40;
+    }
+
+    .cart-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-decoration: none;
+      background-color: #b33951;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .cart-button:hover {
+      background-color: #922d40;
+    }
+
+  </style>
+</head>
+<body>
+<button onclick="addToCart('cake1', 'Black Forest', 500)">+1</button>
+<button onclick="removeFromCart('cake1')">-1</button>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>Search & Filter</h3>
+    <input type="text" id="search" placeholder="Search cakes..." />
+    <select id="sort">
+      <option value="default">Sort By</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
+    <select id="category">
+      <option value="all">All Categories</option>
+      <option value="chocolate">Chocolate</option>
+      <option value="fruit">Fruit</option>
+      <option value="cream">Cream</option>
+    </select>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <a class="back-button" href="cake.html">← Back</a>
+    <a class="cart-button" href="order1.html">🛒 Cart</a>
+    <div class="menu-heading">Menu</div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+<script src="cart.js"></script>
+
+  <script>
+    const cakes = [
+      { id: 1, name: "Chocolate Truffle", price: 600, category: "chocolate", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3ajjD9My1kSDS1vlMqMbZWrAnoq9Kj6x0gg&s", details: "Rich and gooey chocolate cake." },
+      { id: 2, name: "Strawberry Delight", price: 500, category: "fruit", img: "Screenshot (1052)2.png", details: "Fresh strawberries & whipped cream." },
+      { id: 3, name: "Black Forest", price: 550, category: "chocolate", img: "https://source.unsplash.com/200x200/?blackforest-cake", details: "Chocolate sponge with cherries." },
+      { id: 4, name: "Pineapple Cream", price: 450, category: "fruit", img: "https://source.unsplash.com/200x200/?pineapple-cake", details: "Tropical and tangy." },
+      { id: 5, name: "Red Velvet", price: 650, category: "cream", img: "https://source.unsplash.com/200x200/?redvelvet-cake", details: "Classic velvety flavor." },
+      { id: 6, name: "Butterscotch Bliss", price: 600, category: "cream", img: "https://source.unsplash.com/200x200/?butterscotch-cake", details: "Creamy butterscotch goodness." },
+    ];
+
+    const menuGrid = document.getElementById("menuGrid");
+    const quantities = {};
+
+    function displayCakes(cakesToShow) {
+      menuGrid.innerHTML = "";
+      cakesToShow.forEach(cake => {
+        quantities[cake.id] = quantities[cake.id] || 0;
+
+        const card = document.createElement("div");
+        card.className = "cake-card";
+        card.innerHTML = `
+          <img src="${cake.img}" alt="${cake.name}">
+          <div class="cake-info">
+            <div class="cake-name">${cake.name}</div>
+            <div class="cake-price">₹${cake.price} / lb</div>
+          </div>
+          <div class="cake-details">${cake.details}</div>
+          <div class="counter">
+            <button onclick="changeQty(${cake.id}, -1)">-</button>
+            <span id="qty-${cake.id}">${quantities[cake.id]}</span>
+            <button onclick="changeQty(${cake.id}, 1)">+</button>
+          </div>
+        `;
+        menuGrid.appendChild(card);
+      });
+    }
+
+    function changeQty(id, delta) {
+      if (!quantities[id]) quantities[id] = 0;
+      quantities[id] += delta;
+      if (quantities[id] < 0) quantities[id] = 0;
+      document.getElementById(`qty-${id}`).innerText = quantities[id];
+    }
+
+    function applyFilters() {
+      let filtered = [...cakes];
+      const search = document.getElementById("search").value.toLowerCase();
+      const sort = document.getElementById("sort").value;
+      const category = document.getElementById("category").value;
+
+      if (search) {
+        filtered = filtered.filter(cake => cake.name.toLowerCase().includes(search));
+      }
+
+      if (category !== "all") {
+        filtered = filtered.filter(cake => cake.category === category);
+      }
+
+      if (sort === "low") {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sort === "high") {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+
+      displayCakes(filtered);
+    }
+
+    document.getElementById("search").addEventListener("input", applyFilters);
+    document.getElementById("sort").addEventListener("change", applyFilters);
+    document.getElementById("category").addEventListener("change", applyFilters);
+
+    displayCakes(cakes);
+  </script>
+    <div style="margin-left: 240px; padding: 30px; text-align: center;">
+    <button onclick="addAllToCart()" style="background-color: #b33951; color: white; padding: 12px 24px; font-size: 18px; border: none; border-radius: 10px; cursor: pointer;">
+      ➕ Add Selected to Cart
+    </button>
+  </div>
+
+  <script>
+    function addAllToCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      cakes.forEach(cake => {
+        const qty = quantities[cake.id] || 0;
+        if (qty > 0) {
+          const index = cart.findIndex(item => item.id === cake.id);
+          if (index >= 0) {
+            cart[index].quantity += qty;
+          } else {
+            cart.push({ id: cake.id, name: cake.name, price: cake.price, img: cake.img, quantity: qty });
+          }
+        }
+      });
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      // Reset quantities and UI
+      for (let id in quantities) {
+        quantities[id] = 0;
+        const span = document.getElementById(`qty-${id}`);
+        if (span) span.innerText = "0";
+      }
+
+      alert("Selected cakes added to cart!");
+    }
+  </script>
+
+
+</body>
+</html>

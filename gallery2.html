@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dry-Fruits Gallery</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+    body {
+      margin: 0;
+      padding: 40px 20px 20px;
+      background-color: #e8fce8;
+      font-family: 'Baloo 2', cursive, 'Segoe UI', sans-serif;
+      color: #317b3e;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 30px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 0 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #317b3e;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      z-index: 10;
+    }
+
+    .back-button:hover {
+      background-color: #23602d;
+    }
+
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 16px;
+      box-shadow: 0 0 20px #000;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="dry-fruits.html" class="back-button">Back to Dry-Fruits</a>
+  <h1>Dry-Fruits Gallery</h1>
+
+  <div class="gallery">
+    <img src="logo Cashews.jpg" alt="Almonds">
+    <img src="https://source.unsplash.com/featured/?cashews" alt="Cashews">
+    <img src="https://source.unsplash.com/featured/?raisins" alt="Raisins">
+    <img src="https://source.unsplash.com/featured/?pistachios" alt="Pistachios">
+    <img src="https://source.unsplash.com/featured/?walnuts" alt="Walnuts">
+    <img src="https://source.unsplash.com/featured/?dates" alt="Dates">
+    <img src="https://source.unsplash.com/featured/?hazelnuts" alt="Hazelnuts">
+    <img src="https://source.unsplash.com/featured/?dryfruits" alt="Mixed Dry-Fruits">
+    <img src="https://source.unsplash.com/featured/?figs" alt="Figs">
+    <img src="https://source.unsplash.com/featured/?apricots" alt="Apricots">
+  </div>
+
+  <!-- Lightbox container -->
+  <div class="lightbox" id="lightbox">
+    <img src="" alt="Enlarged Image" id="lightbox-img">
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('.gallery img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.style.display = 'flex';
+      });
+    });
+
+    lightbox.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>

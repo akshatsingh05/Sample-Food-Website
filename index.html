@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Friendly Emoji Page</title>
+
+  <!-- Google Font: Baloo 2 -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #afe8fb; /* light sky blue */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Baloo 2', cursive, 'Segoe UI', sans-serif;
+      color: #3b7fff; /* deep sky blue text */
+    }
+
+    .title-box {
+      background-color: #ffffff;
+      padding: 20px 170px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(28, 163, 236, 0.3);
+      text-align: center;
+      margin-bottom: 50px;
+      color: #3b7fff;
+    }
+
+    .title-box h2.top {
+      margin: 0 0 5px;
+      font-size: 22px;
+      font-weight: 600;
+      opacity: 0.85;
+    }
+
+    .title-box h1 {
+      margin: 0;
+      padding-top: 5px;
+      font-size: 48px;
+    }
+
+    .title-box h2.bottom {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: normal;
+    }
+
+    .emoji-container {
+      display: flex;
+      justify-content: center;
+      gap: 100px;
+    }
+
+    .emoji-button {
+      font-size: 160px;
+      padding: 40px 50px 20px;
+      border-radius: 40px;
+      background-color: #ffffff;
+      box-shadow: 0 0 25px rgba(28, 163, 236, 0.3);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .emoji-button:hover {
+      box-shadow: 0 0 50px rgba(28, 49, 236, 0.5);
+      transform: translateY(-5px);
+    }
+
+    .emoji-label {
+      font-size: 24px;
+      font-weight: 600;
+      margin-top: 10px;
+      color: #3b7fff;
+    }
+    @media (max-width: 600px) {
+  .emoji-container {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .emoji-button {
+    font-size: 100px;
+    padding: 30px;
+  }
+
+  .emoji-label {
+    font-size: 20px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="title-box">
+    <h2 class="top">Welcome to</h2>
+    <h1>Ekta's Blueberry</h1>
+    <h2 class="bottom">What would you like to order today?</h2>
+  </div>
+
+  <div class="emoji-container">
+    <a href="cake.html" class="emoji-button" title="Order Cake">
+      🎂
+      <div class="emoji-label">CAKES</div>
+    </a>
+    <a href="dry-fruits.html" class="emoji-button" title="Order Dry Fruits">
+      🥜
+      <div class="emoji-label">DRY-FRUITS</div>
+    </a>
+  </div>
+
+</body>
+</html>

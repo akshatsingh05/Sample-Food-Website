@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cake Gallery</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+    body {
+      margin: 0;
+      padding: 40px 20px 20px;
+      background-color: #fff4fa;
+      font-family: 'Baloo 2', cursive, 'Segoe UI', sans-serif;
+      color: #b33951;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 30px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 0 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #b33951;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      z-index: 10;
+    }
+
+    .back-button:hover {
+      background-color: #922d40;
+    }
+
+    /* Lightbox styles */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 16px;
+      box-shadow: 0 0 20px #000;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="cake.html" class="back-button">Back to Cakes</a>
+  <h1>Cake Gallery</h1>
+
+  <div class="gallery">
+    <img src="Screenshot (1052)2.png" alt="Cake 1">
+    <img src="https://source.unsplash.com/featured/?cake2" alt="Cake 2">
+    <img src="https://source.unsplash.com/featured/?cake3" alt="Cake 3">
+    <img src="https://source.unsplash.com/featured/?cake4" alt="Cake 4">
+    <img src="https://source.unsplash.com/featured/?cake5" alt="Cake 5">
+    <img src="https://source.unsplash.com/featured/?cake6" alt="Cake 6">
+    <img src="https://source.unsplash.com/featured/?cake7" alt="Cake 7">
+    <img src="https://source.unsplash.com/featured/?cake8" alt="Cake 8">
+    <img src="https://source.unsplash.com/featured/?cake9" alt="Cake 9">
+    <img src="https://source.unsplash.com/featured/?cake10" alt="Cake 10">
+  </div>
+
+  <!-- Lightbox container -->
+  <div class="lightbox" id="lightbox">
+    <img src="" alt="Enlarged Image" id="lightbox-img">
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('.gallery img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        lightboxImg.src = img.src;
+        lightbox.style.display = 'flex';
+      });
+    });
+
+    lightbox.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
