@@ -2,66 +2,266 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cart</title>
+  <title>Your Cart - Ekta's Blueberry</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #fff8f0;
+      margin: 0;
+      padding: 0;
+      font-family: 'Baloo 2', cursive, sans-serif;
+      background-color: #fff4f8;
+      color: #b33951;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
       padding: 20px;
-      color: #333;
+      background-color: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     h1 {
       text-align: center;
-      color: #b33951;
+      font-size: 40px;
+      margin-bottom: 30px;
     }
 
     .cart-item {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px auto;
-      max-width: 500px;
-      background-color: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #ffc8d6;
+      padding: 12px 0;
     }
 
-    .cart-item h3 {
-      margin: 0;
+    .cart-info {
+      flex: 1;
+    }
+
+    .cart-name {
       font-size: 20px;
-      color: #b33951;
+      font-weight: bold;
     }
 
-    .cart-item p {
-      margin: 6px 0;
+    .cart-price {
+      font-size: 16px;
+      color: #922d40;
     }
+
+    .counter {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .counter button {
+      background-color: #b33951;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 18px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .counter button:hover {
+      background-color: #922d40;
+    }
+
+    .cart-total {
+      font-size: 24px;
+      text-align: right;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .cart-btn {
+      padding: 12px 28px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+.cart-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.cart-btn {
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Left - Clear Cart */
+.clear-btn {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.clear-btn:hover {
+  background-color: #ddd;
+}
+
+/* Right - Checkout */
+.checkout-btn {
+  background-color: #b33951;
+  color: white;
+}
+
+.checkout-btn:hover {
+  background-color: #922d40;
+}
+
+.back-btn {
+  display: inline-block;
+  margin: 20px 0 0 20px; /* top, right, bottom, left */
+  text-decoration: none;
+  background-color: #b33951;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  position: relative; /* keeps it in the normal flow */
+}
+
+.back-btn:hover {
+  background-color: #922d40;
+}
+
   </style>
 </head>
 <body>
+  <a href="menu1.html" class="back-btn">← Back to Menu</a>
 
-  <h1>Your Cart</h1>
-  <div id="cartContainer"></div>
+  <div class="container">
+    
+    <h1>Your Cart 🛒</h1>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotal"></div>
+<div class="cart-total" id="cartTotal"></div>
+
+<div class="cart-buttons">
+  <button onclick="clearCart()" class="cart-btn clear-btn">Clear Cart</button>
+  <button onclick="checkout()" class="cart-btn checkout-btn">Checkout</button>
+</div>
+
+  </div>
 
   <script>
-    const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-    const container = document.getElementById("cartContainer");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    if (cartData.length === 0) {
-      container.innerHTML = "<p>Your cart is empty!</p>";
-    } else {
-      cartData.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "cart-item";
-        div.innerHTML = `
-          <h3>${item.name}</h3>
-          <p>Quantity: ${item.quantity}</p>
-          <p>Price: ₹${item.price}</p>
-          <p>Total: ₹${item.price * item.quantity}</p>
+    function renderCart() {
+      const cartItems = document.getElementById("cartItems");
+      const cartTotal = document.getElementById("cartTotal");
+      cartItems.innerHTML = "";
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = "<p class='empty-cart'>Your cart is empty.</p>";
+        cartTotal.textContent = "";
+        return;
+      }
+
+      let total = 0;
+      cart.forEach((item, index) => {
+        const subtotal = item.quantity * item.price;
+        total += subtotal;
+
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "cart-item";
+        itemDiv.innerHTML = `
+          <div class="cart-info">
+            <div class="cart-name">${item.name}</div>
+            <div class="cart-price">₹${item.price} x ${item.quantity} = ₹${subtotal}</div>
+          </div>
+          <div class="counter">
+            <button onclick="changeQty(${index}, -1)">-</button>
+            <span>${item.quantity}</span>
+            <button onclick="changeQty(${index}, 1)">+</button>
+          </div>
         `;
-        container.appendChild(div);
+        cartItems.appendChild(itemDiv);
       });
-    }
-  </script>
 
+      cartTotal.textContent = `Total: ₹${total}`;
+    }
+
+    function changeQty(index, delta) {
+      cart[index].quantity += delta;
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function clearCart() {
+      if (confirm("Are you sure you want to clear the cart?")) {
+        localStorage.removeItem("cart");
+        cart = [];
+        renderCart();
+        alert("🗑️ Cart cleared.");
+      }
+    }
+
+    async function checkout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      let y = 20;
+      doc.setFontSize(16);
+      doc.text("Ekta's Blueberry - Order Receipt", 20, y);
+      y += 10;
+      doc.setFontSize(12);
+      doc.text(`Date: ${new Date().toLocaleString()}`, 20, y);
+      y += 10;
+
+      let total = 0;
+      doc.text("Items:", 20, y);
+      y += 10;
+
+      cart.forEach(item => {
+        const subtotal = item.quantity * item.price;
+        total += subtotal;
+        doc.text(`${item.name} - Qty: ${item.quantity} x ₹${item.price} = ₹${subtotal}`, 20, y);
+        y += 10;
+      });
+
+      y += 5;
+      doc.setFontSize(14);
+      doc.text(`Total: ₹${total}`, 20, y);
+
+      doc.save("Ekta_Blueberry_Receipt.pdf");
+
+      setTimeout(() => {
+        alert("🎉 Order placed successfully!");
+      }, 200);
+
+      localStorage.removeItem("cart");
+      cart = [];
+      renderCart();
+    }
+
+    renderCart();
+  </script>
 </body>
 </html>
