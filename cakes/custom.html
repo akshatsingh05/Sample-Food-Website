@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Custom Cake Orders - Ekta's Blueberry</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Baloo 2', cursive, sans-serif;
+      background-color: #fff0f5;
+      color: #b33951;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    p.description {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    form label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+
+    form input,
+    form select,
+    form textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    form textarea {
+      height: 100px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-top: 30px;
+      background-color: #b33951;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .back-button:hover {
+      background-color: #922d40;
+    }
+
+    .checkout-btn {
+      display: block;
+      margin: 40px auto 0;
+      padding: 12px 30px;
+      background-color: #b33951;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+      background-color: #922d40;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Custom Cake Orders 🎂</h1>
+    <p class="description">Fill in the details for your custom cake. We’ll get it baked just the way you like it!</p>
+
+    <form id="customCakeForm">
+      <label>Name</label>
+      <input type="text" id="name" placeholder="Your Name" required />
+
+      <label>Contact Number</label>
+      <input type="tel" id="phone" placeholder="123-456-7890" required />
+
+      <label>Email</label>
+      <input type="email" id="email" placeholder="you@example.com" required />
+
+      <label>Occasion</label>
+      <select id="occasion">
+        <option>Birthday</option>
+        <option>Wedding</option>
+        <option>Anniversary</option>
+        <option>Baby Shower</option>
+        <option>Other</option>
+      </select>
+
+      <label>Preferred Date</label>
+      <input type="date" id="date" required />
+
+      <label>Flavor Preference</label>
+      <input type="text" id="flavor" placeholder="Chocolate, Vanilla, etc." required />
+
+      <label>Additional Requests / Message</label>
+      <textarea id="message" placeholder="Write your custom message or design preference here..."></textarea>
+
+      <label>Upload a Sample Design (optional)</label>
+      <input type="file" id="design" accept="image/*" />
+    </form>
+
+    <button class="checkout-btn" onclick="addCustomCake()">Checkout</button>
+    <a href="cake.html" class="back-button">⬅ Back to Home</a>
+  </div>
+
+  <script>
+    function addCustomCake() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const occasion = document.getElementById("occasion").value;
+      const date = document.getElementById("date").value;
+      const flavor = document.getElementById("flavor").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !phone || !email || !date || !flavor) {
+        alert("Please fill all required fields.");
+        return;
+      }
+
+      const customCake = {
+        name: `Custom Cake (${occasion})`,
+        price: 999,
+        quantity: 1,
+        details: `Flavor: ${flavor}, Msg: ${message}`,
+        image: null
+      };
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push(customCake);
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      alert("🎂 Custom cake added to cart. Proceeding to checkout.");
+      window.location.href = "order1.html";
+    }
+  </script>
+
+</body>
+</html>
