@@ -54,7 +54,6 @@ function clearBag() {
 }
 
 async function checkout() {
-  const bag = JSON.parse(localStorage.getItem("bag")) || [];
   if (bag.length === 0) {
     alert("Your bag is empty.");
     return;
@@ -64,79 +63,37 @@ async function checkout() {
   const doc = new jsPDF();
 
   let y = 20;
-
-  // Header
-  doc.setFontSize(18);
-  doc.setTextColor(59, 127, 89);
-  doc.text("Ekta's Blueberry - Dry Fruits Division", 20, y);
+  doc.setFontSize(16);
+  doc.text("Ekta's Blueberry - Dry Fruits Receipt", 20, y);
   y += 10;
-
-  doc.setFontSize(11);
-  doc.setTextColor(0, 0, 0);
-  doc.text("Address: Ekta Nagar, India", 20, y);
-  y += 6;
-  doc.text("Phone: +91-9876543210  |  www.ektablueberry.com", 20, y);
-  y += 6;
-
-  const orderId = Math.floor(100000 + Math.random() * 900000);
-  doc.text(`Order ID: #${orderId}`, 20, y);
-  y += 6;
+  doc.setFontSize(12);
   doc.text(`Date: ${new Date().toLocaleString()}`, 20, y);
   y += 10;
 
-  // Section Heading
-  doc.setFontSize(14);
-  doc.setTextColor(59, 127, 89);
-  doc.text("Order Summary", 20, y);
+  let total = 0;
+  doc.text("Items:", 20, y);
   y += 10;
 
-  // Column Headings
-  doc.setFontSize(12);
-  doc.setTextColor(0, 0, 0);
-  doc.text("Item", 20, y);
-  doc.text("Qty", 100, y);
-  doc.text("Price", 130, y);
-  doc.text("Total", 170, y);
-  y += 6;
-  doc.line(20, y, 190, y); // line below headings
-  y += 6;
-
-  // Items
-  let total = 0;
   bag.forEach(item => {
     const subtotal = item.quantity * item.price;
     total += subtotal;
-
-    doc.text(item.name, 20, y);
-    doc.text(`${item.quantity}`, 105, y);
-    doc.text(`₹${item.price}`, 135, y);
-    doc.text(`₹${subtotal}`, 170, y);
-    y += 8;
+    doc.text(`${item.name} - Qty: ${item.quantity} x ₹${item.price} = ₹${subtotal}`, 20, y);
+    y += 10;
   });
 
-  // Total
-  y += 10;
-  doc.setFontSize(13);
-  doc.setTextColor(59, 127, 89);
-  doc.text(`Grand Total: ₹${total}`, 140, y, { align: "right" });
+  y += 5;
+  doc.setFontSize(14);
+  doc.text(`Total: ₹${total}`, 20, y);
 
-  // Thank You
-  y += 20;
-  doc.setFontSize(12);
-  doc.setTextColor(90, 90, 90);
-  doc.text("Thank you for choosing Ekta's Blueberry for your dry fruit needs!", 20, y);
+  doc.save("Dry_Fruits_Receipt.pdf");
 
-  // Save PDF
-  doc.save(`DryFruits_Order_${orderId}.pdf`);
-
-  // Confirm & Clear Bag
   setTimeout(() => {
     alert("🎉 Order placed successfully!");
-  }, 300);
+  }, 200);
 
   localStorage.removeItem("bag");
+  bag = [];
   renderBag();
 }
-
 
 renderBag();
