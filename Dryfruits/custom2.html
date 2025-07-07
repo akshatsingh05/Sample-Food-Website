@@ -1,11 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <title>Gifting Options</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Baloo 2', cursive, sans-serif;
+      background-color: #e8f8ec;
+      color: #3b7f59;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #fff;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-right: 2px solid #c8f5d6;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+    }
+
+    .sidebar h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar input,
+    .sidebar select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .main {
+      margin-left: 240px;
+      padding: 30px;
+      position: relative;
+    }
+
+    .menu-heading {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 30px;
+      font-weight: 800;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .gift-card {
+      background-color: #ffffff;
+      padding: 10px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      position: relative;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .gift-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .gift-card img {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      object-fit: cover;
+      transition: transform 0.3s ease, height 0.3s ease;
+    }
+
+    .gift-card:hover img {
+      transform: scale(1.1);
+    }
+
+    .gift-info {
+      margin-top: 10px;
+    }
+
+    .gift-name {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .gift-price {
+      font-size: 16px;
+      color: #2c6045;
+    }
+
+    .gift-details {
+      display: none;
+      font-size: 14px;
+      margin-top: 8px;
+      color: #444;
+    }
+
+    .gift-card:hover .gift-details {
+      display: block;
+    }
+
+    .counter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0 15px;
+    }
+
+    .counter button {
+      background-color: #3b7f59;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .counter button:hover {
+      background-color: #2c6045;
+    }
+
+    .counter span {
+      font-size: 18px;
+      min-width: 20px;
+      display: inline-block;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-decoration: none;
+      background-color: #3b7f59;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .back-button:hover {
+      background-color: #2c6045;
+    }
+
+    .bag-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-decoration: none;
+      background-color: #3b7f59;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .bag-button:hover {
+      background-color: #2c6045;
+    }
+    .add-btn {
+  background-color: #3b7f59;
+  color: white;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn {
+  background-color: #3b7f59;
+  color: white;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn {
+  background-color: #3b7f59;
+  color: white;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #2c6045;
+}
+
+
+  </style>
 </head>
 <body>
-    <h1>Hello</h1>
+
+  <div class="sidebar">
+    <h3>Search & Filter</h3>
+    <input type="text" id="search" placeholder="Search gifts..." />
+    <select id="sort">
+      <option value="default">Sort By</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+    </select>
+    <select id="category">
+      <option value="all">All Categories</option>
+      <option value="festive">Festive</option>
+      <option value="premium">Premium</option>
+      <option value="corporate">Corporate</option>
+    </select>
+  </div>
+
+  <div class="main">
+    <a class="back-button" href="dry-fruits.html">← Back</a>
+    <a class="bag-button" href="order2.html">🛍️ Bag</a>
+    <div class="menu-heading">Gifting Options</div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+  <div style="text-align: center; margin: 30px 0;">
+  <button class="add-btn" onclick="addSelectedToBag()">Add to Bag</button>
+</div>
+
+
+  <script src="bag.js"></script>
+  <script>
+    const gifts = [
+      { id: 101, name: "Festive Dry Fruit Hamper", price: 1200, category: "festive", img: "logo Cashews.jpg", details: "Includes almonds, cashews, raisins." },
+      { id: 102, name: "Premium Nut Basket", price: 1500, category: "premium", img: "https://source.unsplash.com/200x200/?dry-fruits,gift-pack", details: "Assorted nuts in a luxury box." },
+      { id: 103, name: "Corporate Gift Box", price: 1000, category: "corporate", img: "https://source.unsplash.com/200x200/?corporate-gift,nuts", details: "Perfect for office gifting." },
+      { id: 104, name: "Mini Gift Pack", price: 500, category: "festive", img: "https://source.unsplash.com/200x200/?dry-fruits,gift-small", details: "Budget-friendly mini pack." },
+      { id: 105, name: "Royal Treat Combo", price: 1800, category: "premium", img: "https://source.unsplash.com/200x200/?luxury-dry-fruits", details: "Premium fruits and box." },
+    ];
+
+    const menuGrid = document.getElementById("menuGrid");
+    const quantities = {};
+
+    function displayGifts(giftsToShow) {
+      menuGrid.innerHTML = "";
+      giftsToShow.forEach(gift => {
+        quantities[gift.id] = quantities[gift.id] || 0;
+
+        const card = document.createElement("div");
+        card.className = "gift-card";
+card.innerHTML = `
+  <img src="${gift.img}" alt="${gift.name}">
+  <div class="gift-info">
+    <div class="gift-name">${gift.name}</div>
+    <div class="gift-price">₹${gift.price}</div>
+  </div>
+  <div class="gift-details">${gift.details}</div>
+  <div class="counter">
+    <button onclick="changeQty(${gift.id}, -1)">-</button>
+    <span id="qty-${gift.id}">${quantities[gift.id]}</span>
+    <button onclick="changeQty(${gift.id}, 1)">+</button>
+  </div>
+`;
+
+        menuGrid.appendChild(card);
+      });
+    }
+
+    function changeQty(id, delta) {
+      if (!quantities[id]) quantities[id] = 0;
+      quantities[id] += delta;
+      if (quantities[id] < 0) quantities[id] = 0;
+      document.getElementById(`qty-${id}`).innerText = quantities[id];
+    }
+    function addToBag(id) {
+  if (quantities[id] === 0) {
+    alert("Please select at least 1 quantity to add to the bag.");
+    return;
+  }
+
+  const item = gifts.find(g => g.id === id);
+  const bag = JSON.parse(localStorage.getItem("bag")) || [];
+
+  const existing = bag.find(g => g.id === id);
+  if (existing) {
+    existing.quantity += quantities[id];
+  } else {
+    bag.push({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: quantities[id],
+    });
+  }
+
+  localStorage.setItem("bag", JSON.stringify(bag));
+  quantities[id] = 0;
+  document.getElementById(`qty-${id}`).innerText = 0;
+  alert("✅ Added to bag!");
+}
+
+
+    function applyFilters() {
+      let filtered = [...gifts];
+      const search = document.getElementById("search").value.toLowerCase();
+      const sort = document.getElementById("sort").value;
+      const category = document.getElementById("category").value;
+
+      if (search) {
+        filtered = filtered.filter(gift => gift.name.toLowerCase().includes(search));
+      }
+
+      if (category !== "all") {
+        filtered = filtered.filter(gift => gift.category === category);
+      }
+
+      if (sort === "low") {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (sort === "high") {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+
+      displayGifts(filtered);
+    }
+
+    document.getElementById("search").addEventListener("input", applyFilters);
+    document.getElementById("sort").addEventListener("change", applyFilters);
+    document.getElementById("category").addEventListener("change", applyFilters);
+
+    displayGifts(gifts);
+    function addSelectedToBag() {
+  const bag = JSON.parse(localStorage.getItem("bag")) || [];
+  let addedSomething = false;
+
+  gifts.forEach(gift => {
+    const qty = quantities[gift.id];
+    if (qty > 0) {
+      const existing = bag.find(item => item.id === gift.id);
+      if (existing) {
+        existing.quantity += qty;
+      } else {
+        bag.push({
+          id: gift.id,
+          name: gift.name,
+          price: gift.price,
+          quantity: qty
+        });
+      }
+      quantities[gift.id] = 0;
+      document.getElementById(`qty-${gift.id}`).innerText = 0;
+      addedSomething = true;
+    }
+  });
+
+  if (addedSomething) {
+    localStorage.setItem("bag", JSON.stringify(bag));
+    alert("✅ Items added to bag!");
+  } else {
+    alert("⚠️ Please select at least 1 item to add.");
+  }
+}
+
+  </script>
 </body>
 </html>
