@@ -64,7 +64,7 @@ async function checkout() {
 
   let y = 20;
   doc.setFontSize(16);
-  doc.text("Ekta's Blueberry - Dry Fruits Receipt", 20, y);
+  doc.text("Modern Foods - Dry Fruits Receipt", 20, y);
   y += 10;
   doc.setFontSize(12);
   doc.text(`Date: ${new Date().toLocaleString()}`, 20, y);
